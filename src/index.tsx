@@ -1,8 +1,8 @@
 import React from "react";
-import '../../css/index.css';
-import useTableHook from "../../hooks/table";
-import TableFooter from "../TableFooter";
-import SearchBar from "../SearchBar";
+import './css/index.css';
+import useTableHook from "./hooks/table";
+import TableFooter from "./components/TableFooter";
+import SearchBar from "./components/SearchBar";
 
 interface HeaderDataProps {
     Header: string,
