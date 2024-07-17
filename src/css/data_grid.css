@@ -21,6 +21,6 @@
 }
 
 .data_grid_colum_cell {
-    border: 1px solid #000;
+    /* border: 1px solid #000; */
     display: flex;
 }
