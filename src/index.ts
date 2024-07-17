@@ -1,1 +1,6 @@
-export * from "./components";
+import DataGrid from "./components/DataGrid";
+
+
+export {
+    DataGrid
+}

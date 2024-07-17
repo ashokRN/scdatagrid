@@ -3,12 +3,17 @@
   "version": "1.0.5",
   "description": "This package used to simple data grid package with global search filter",
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
   "files": [
-    "./dist"
+    "dist"
   ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "build": "webpack",
+    "build": "tsc",
     "tsc": "tsc",
     "build:esm": "tsc",
     "build:cjs": "tsc --module CommonJS --outDir dist/cjs"
