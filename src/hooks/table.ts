@@ -28,7 +28,7 @@ const useTableHook = (data: Object[], page: number, rowPerPage: number) => {
 
         const slicedata = sliceData(data, page, rowPerPage);
         setSlice([...slicedata]);
-    }, [data, setTabRange, page, setSlice]);
+    }, [data, setTabRange, page, setSlice, rowPerPage]);
 
 
     return { slice, range: tabRange };

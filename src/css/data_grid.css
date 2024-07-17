@@ -16,3 +16,11 @@
     font-size: 18px;
 }
 
+.th_head_sort {
+    cursor: pointer;
+}
+
+.data_grid_colum_cell {
+    border: 1px solid #000;
+    display: flex;
+}

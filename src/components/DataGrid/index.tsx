@@ -1,13 +1,12 @@
 import React from "react";
-import './css/index.css';
-import SearchBar from "../SearchBar";
-import TableFooter from "../TableFooter";
 import useTableHook from "../../hooks/table";
-
+import TableFooter from "../TableFooter";
+import SearchBar from "../SearchBar";
+import '../../css/index.css';
 
 interface HeaderDataProps {
     Header: string,
-    filterable?: boolean,
+    sort?: boolean,
     accessor: string
 }
 interface DataGridProps {
@@ -31,14 +30,25 @@ type JsonValue = string | number | boolean | JsonObject | JsonArray | null | und
 type JsonObject = { [Key in string]?: JsonValue }
 
 
-type HeaderComponentProps = {
-    data: string[]
+type HeaderData = {
+    title: string,
+    sort: boolean
 }
 
-const HeaderComponent: React.FC<HeaderComponentProps> = ({ data = [] }) => {
+type HeaderComponentProps = {
+    data: any[],
+    onSort?: Function
+}
+
+const HeaderComponent: React.FC<HeaderComponentProps> = ({ data = [], onSort = () => { } }) => {
     return <thead>
         <tr>
-            {data.length > 0 ? data.map((item, index) => <th key={index + 1} scope="col">{item}</th>) : <th />}
+            {data.length > 0 ? data.map((item: HeaderData, index) => {
+                return <th key={index + 1} 
+                    onClick={() => item.sort ? onSort(index) : {}}
+                    scope="col">
+                        <div className={`th_head${item.sort ? '_sort' : ''}`}>{item.title} {item.sort ? <>↓</> : null}</div> </th>
+            }) : <th />}
         </tr>
     </thead>
 
@@ -53,7 +63,7 @@ const ColumComponet: React.FC<ColumComponentProps> = ({ columData = [] }) => {
     return <React.Fragment>
         {columData.length > 0 ? <tbody>
             {columData.map((colum, index) => (
-                <tr key={index}>{colum.map((item, i) => (<td key={i}>{item}</td>))}</tr>
+                <tr key={index}>{colum.map((item, i) => (<td key={i}><div className={`data_grid_colum_cell${i === 0 ? '_center' : ''}`}>{item}</div></td>))}</tr>
             ))}
         </tbody> : <tbody />}
     </React.Fragment>
@@ -77,17 +87,26 @@ const DataGrid: React.FC<DataGridProps> = ({
 
     const [searchTerm, setSearchTerm] = React.useState<string>('');
     const [page, setPage] = React.useState<number>(1);
-    const { slice, range } = useTableHook(columData, page, numOfRows);
+    const [rowPerPage, setRowPerPage] = React.useState<number>(numOfRows);
+    const [sortArr, setShortArr] = React.useState<any[][]>([]);
+    const { slice, range } = useTableHook(columData, page, rowPerPage);
 
 
     const _getHeadData = (data: HeaderDataProps[]) => {
 
-        let headArrData = ["Sl.No"];
+        let headArrData: Object[] = [{ title: "Sl.No", sort: false }];
 
         for (let index = 0; index < data.length; index++) {
-            headArrData.push(data[index]["Header"]);
+            headArrData.push({ title: data[index]["Header"], sort: data[index]["sort"] ?? false });
         }
         return headArrData;
+
+    }
+
+    const _getSortArray = (columDataObj: any[][], sortIdex: number) => {
+        let newSortedArr: any[][];
+        newSortedArr = columDataObj.sort((a, b) => a[sortIdex].localeCompare(b[sortIdex]));
+        setShortArr(newSortedArr);
 
     }
 
@@ -100,27 +119,33 @@ const DataGrid: React.FC<DataGridProps> = ({
                 let accessor = rowData[j].accessor;
                 let tempObj: any;
                 if (accessor.includes(".")) {
-                    accessor.split('.').map((k, i, values) => {
-                        if (i === 0) tempObj = obj[k];
-                        else tempObj = tempObj[k];
-                    });
+                    let notationArr = accessor.split('.');
+                    for (let k = 0; k < notationArr.length; k++) {
+                        const element = notationArr[k];
+                        if (k === 0) tempObj = obj[element];
+                        else tempObj = tempObj[element];
+
+                    }
                     colum.push(tempObj);
                 }
                 else colum.push(obj[accessor]);
             }
             columDataArrList.push([index + 1, ...colum]);
         }
-
         return columDataArrList;
 
     }
-    //TODO: Added nested filter in this Fn
-    const filteredRows = (data: Object[]) => {
+
+    const filterRowSort = (data: any[][]) => {
         return data.filter((row) =>
-            Object.values(row).some((value) =>
+            row.some((value) =>
                 String(value).toLowerCase().includes(searchTerm.toLowerCase())
             ));
     };
+
+
+    const HeaderMemoData = React.useMemo(() => _getHeadData(headerData), [headerData]);
+    const ColumMemoData = React.useMemo(() => _getBodyData(headerData, pagination ? slice : columData), [slice, pagination, columData, headerData])
 
 
 
@@ -131,13 +156,11 @@ const DataGrid: React.FC<DataGridProps> = ({
             {globalSearch && <SearchBar value={searchTerm} onChange={(value) => setSearchTerm(value)} />}
             {slice.length !== 0 ?
                 <React.Fragment>
-                    <table className="table table-bordered">
-                        <HeaderComponent data={_getHeadData(headerData)} />
-                        <ColumComponet columData={_getBodyData(headerData, searchTerm === "" ? pagination ? slice : columData : filteredRows(columData))} />
+                    <table className="table table-striped">
+                        <HeaderComponent data={HeaderMemoData} onSort={(sortIndex: number) => _getSortArray(_getBodyData(headerData, slice), sortIndex)} />
+                        <ColumComponet columData={sortArr.length > 0 ? searchTerm === "" ? sortArr : filterRowSort(sortArr) : searchTerm === "" ? ColumMemoData : filterRowSort(ColumMemoData)} />
                     </table>
-                    <TableFooter range={range} slice={slice} setPage={setPage} page={page} setRowPerPage={(dt:number) => {
-                        console.log(dt);
-                    }} />
+                    <TableFooter range={range} slice={slice} setPage={setPage} page={page} setRowPerPage={(dt: number) => setRowPerPage(dt)} />
                 </React.Fragment> : <div>Loading...</div>}
         </div>
     </div>
