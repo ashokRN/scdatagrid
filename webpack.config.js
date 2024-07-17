@@ -2,6 +2,7 @@ const path = require('path');
 
 module.exports = {
     entry: './src/index.ts',
+    mode : "production",
     module: {
         rules: [
             {
@@ -22,7 +23,7 @@ module.exports = {
         extensions: ['.tsx', '.ts', '.js', '.css'],
     },
     output: {
-        filename: 'bundle.js',
+        filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
     },
 };
