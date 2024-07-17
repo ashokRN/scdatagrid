@@ -1,6 +1,6 @@
 {
   "name": "scdatagrid",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "This package used to simple data grid package with global search filter",
   "main": "dist/",
   "keywords": [
