@@ -3,7 +3,7 @@
     height: 50px;
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: start;
     padding: 15px 30px;
     margin: 10px 0px;
 }
