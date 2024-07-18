@@ -32,5 +32,15 @@ Or
 
 ## Usage 
 
+```
+import { DataGrid } from "scdatagrid";
+import data from "./data.json";
 
- 
+const App: React.FC = () => {
+
+				return <DataGrid headerData={headerData} columData={data} />
+
+}
+
+export default App;
+```	
