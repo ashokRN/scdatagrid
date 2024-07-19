@@ -162,8 +162,16 @@ const DataGrid: React.FC<DataGridProps> = ({
      };
 
      const filterRowSort = (data: any[][]) => {
-          return data.filter((row) => row.some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())));
+          // return data.filter((row) => row.some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())));
+          return data.filter((row) =>
+               row.some((value) => {
+                    let reg = new RegExp(`/?:^|\W)${value}(?:$|\W)/`);
+                    if (reg.test(searchTerm)) return row;
+               }),
+          );
      };
+
+     console.log('Publishing....');
 
      const HeaderMemoData = React.useMemo(() => _getHeadData(headerData), [headerData]);
      const ColumMemoData = React.useMemo(
