@@ -1,5 +1,4 @@
 import React from 'react';
-import '../../css/index.css';
 
 interface TableFooterProps {
      range: any[];

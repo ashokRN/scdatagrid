@@ -6,17 +6,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.(ts|tsx)$/,
-                use: {
-                    loader : "babel-loader",
-                    options:{
-                        presets:[
-                            "@babel/preset-env",
-                            "@babel/preset-react",
-                            "@babel/preset-typescript"
-                        ]
-                    }
-                },
+                test: /\.ts(x?)$/,
+                use: 'ts-loader',
                 exclude: /node_modules/,
             },
             {
@@ -29,9 +20,10 @@ module.exports = {
         "react": "react"
     },
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
+        extensions: ['.tsx', '.ts', '.js', '.css'],
     },
     output: {
+        libraryTarget: 'commonjs',
         filename: 'index.js',
         path: path.resolve(__dirname, 'dist'),
     },

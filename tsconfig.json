@@ -17,28 +17,19 @@
     "types": [
       "node"
     ],
-    "module": "es2015",
+    "module": "es6",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "outDir": "./dist",
+    "outDir": "./dist/",
     "sourceMap": true,
     "strict": true,
-    "target": "es6"
+    "target": "es5"
   },
   "exclude": [
     "node_modules",
     "dist",
     "__tests__"
   ],
-  "hooks": [
-    "copy-files" // copies all files to the dist folder
-  ],
-  "css": [
-    "copy-files" // copies all files to the dist folder
-  ],
-  "include": [
-    "src/",
-    "src/css/*.css" // include css files while building the project using tsc
-  ]
+  "include": ["src"]
 }
