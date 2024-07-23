@@ -164,8 +164,8 @@ const DataGrid: React.FC<DataGridProps> = ({
           // return data.filter((row) => row.some((value) => String(value).toLowerCase().includes(searchTerm.toLowerCase())));
           return data.filter((row) =>
                row.some((value) => {
-                    let reg = new RegExp(`/?:^|\W)${value}(?:$|\W)/`);
-                    if (reg.test(searchTerm)) return row;
+                    let reg = new RegExp(searchTerm, "i");
+                    if (reg.test(value)) return row;
                }),
           );
      };

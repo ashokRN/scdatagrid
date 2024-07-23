@@ -1,6 +1,6 @@
 {
   "name": "scdatagrid",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "description": "This package used to simple data grid package with global search filter",
   "main": "dist/",
   "keywords": [
@@ -11,8 +11,7 @@
   "scripts": {
     "start": "webpack serve",
     "build": "webpack",
-    "test": "jest",
-    "copy-files": "copyfiles -u 1 src/**/*.css dist/"
+    "test": "jest"
   },
   "author": "Ashokkumar A",
   "repository": {
