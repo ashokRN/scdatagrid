@@ -15,7 +15,8 @@
       "esnext"
     ],
     "types": [
-      "node"
+      "node",
+      "jest"
     ],
     "module": "es6",
     "moduleResolution": "node",
